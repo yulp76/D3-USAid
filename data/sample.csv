@@ -1,11 +1,11 @@
-,implementing_agency_name,numeric_year,country_name,dac_category_name,region_name,income_group_name,constant_amount
-5346,Department of Defense,2015,Afghanistan,Governance,South and Central Asia,Low Income Country,6962922610
-5347,Department of Defense,2015,Afghanistan,Health and Population,South and Central Asia,Low Income Country,54998788
-5348,Department of Defense,2015,Afghanistan,Infrastructure,South and Central Asia,Low Income Country,139587440
-5374,Department of Defense,2015,Brazil,Governance,Western Hemisphere,Upper Middle Income Country,788021
-5464,Department of Defense,2015,Kenya,Governance,Sub-Saharan Africa,Lower Middle Income Country,76497913
-5465,Department of Defense,2015,Kenya,Health and Population,Sub-Saharan Africa,Lower Middle Income Country,10843071
-6901,Department of Energy,2015,Afghanistan,Governance,South and Central Asia,Low Income Country,349606
-6925,Department of Energy,2015,Brazil,Infrastructure,Western Hemisphere,Upper Middle Income Country,459993
-6999,Department of Energy,2015,Kenya,Governance,Sub-Saharan Africa,Lower Middle Income Country,451143
-7000,Department of Energy,2015,Kenya,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,375304
+implementing_agency_name,numeric_year,country_name,dac_category_name,region_name,income_group_name,constant_amount
+Department of Defense,2015,Afghanistan,Governance,South and Central Asia,Low Income Country,6962922610
+Department of Defense,2015,Afghanistan,Health and Population,South and Central Asia,Low Income Country,54998788
+Department of Defense,2015,Afghanistan,Infrastructure,South and Central Asia,Low Income Country,139587440
+Department of Defense,2015,Brazil,Governance,Western Hemisphere,Upper Middle Income Country,788021
+Department of Defense,2015,Kenya,Governance,Sub-Saharan Africa,Lower Middle Income Country,76497913
+Department of Defense,2015,Kenya,Health and Population,Sub-Saharan Africa,Lower Middle Income Country,10843071
+Department of Energy,2015,Afghanistan,Governance,South and Central Asia,Low Income Country,349606
+Department of Energy,2015,Brazil,Infrastructure,Western Hemisphere,Upper Middle Income Country,459993
+Department of Energy,2015,Kenya,Governance,Sub-Saharan Africa,Lower Middle Income Country,451143
+Department of Energy,2015,Kenya,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,375304
