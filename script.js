@@ -130,10 +130,12 @@ var label = d3.arc()
 var pie = d3.pie()
             .value(function(d) { return d.value; });
 
-var map_path = d3.geoPath()
-                 .projection(d3.geoRobinson()
+var projection = d3.geoRobinson()
                   .translate([(width + margin.left + margin.right)/2, (height + margin.top + margin.bottom)/2 + 50])
-                  .scale([250]));
+                  .scale(250)
+
+var map_path = d3.geoPath()
+                 .projection(projection);
 
 svg2.append("clipPath")
     .attr("id", "map_area")
@@ -143,32 +145,56 @@ svg2.append("clipPath")
     .attr("r", innerRadius)
 
 
-d3.csv("data/sample.csv", function(data) {
-  agg = aggregate_by_type(data);
-  donut_plot(agg);
-});
+d3.queue()
+  .defer(d3.csv, 'data/sample.csv')
+  .defer(d3.json, 'data/world.json')
+  .awaitAll(function (error, results) {
+    if (error) { throw error; }
 
-d3.json("data/world.json", function(json) {
+  by_type = aggregate_by_type(results[0]);
+  donut_plot(by_type);
 
-  console.log(json)
+  by_country = aggregate_by_country(results[0]);
+  console.log(by_country); 
+
   
+
   g.selectAll("path")
-      .data(json.features)
+      .data(results[1].features)
       .enter()
       .append("path")
+      .attr("class", "country")
       .attr("clip-path", "url(#map_area)")
       .attr("d", map_path)
       .style("fill", "steelblue")
       .append("title")
-      .text(function(d) { return d.properties.sovereignt});
-});
+      .text(function(d) { return d.properties.sovereignt });
 
+
+
+});
+    
 function aggregate_by_type(data) {
   return d3.nest()
   .key(function(d) { return d.dac_category_name; })
   .rollup(function(v) { return d3.sum(v, function(d) { return d.constant_amount; }); })
   .entries(data);
 };
+
+function aggregate_by_country(data) {
+  grouped = d3.nest()
+  .key(function(d) { return d.country_name; })
+  .entries(data);
+
+  grouped.forEach(function(country) {
+    country.values = d3.nest()
+    .key(function(d) { return d.dac_category_name; })
+    .rollup(function(v) { return d3.sum(v, function(d) { return d.constant_amount; }); })
+    .entries(country.values)
+  });
+
+  return grouped
+}
 
 function donut_plot(data) {
   var arcs = svg2.selectAll("g.arc")
