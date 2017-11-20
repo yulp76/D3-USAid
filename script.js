@@ -116,18 +116,36 @@ svg2 = d3.select("#chart2")
 
 var outerRadius = Math.min(width, height)/2;
 var innerRadius = outerRadius - 50;
+
 var arc = d3.arc()
           .innerRadius(innerRadius)
           .outerRadius(outerRadius);
+
 var label = d3.arc()
           .innerRadius(outerRadius-30)
           .outerRadius(outerRadius-30);
+
 var pie = d3.pie()
             .value(function(d) { return d.value; });
+
+var map_path = d3.geoPath()
+                 .projection(d3.geoRobinson()
+                  .translate([(width + margin.left + margin.right)/2, (height + margin.top + margin.bottom)/2 + 50])
+                  .scale([250]));
 
 d3.csv("data/sample.csv", function(data) {
   agg = aggregate_by_type(data);
   donut_plot(agg);
+});
+
+d3.json("data/world.json", function(json) {
+  
+  svg2.selectAll("path")
+      .data(json.features)
+      .enter()
+      .append("path")
+      .attr("d", map_path)
+      .style("fill", "steelblue");
 });
 
 function aggregate_by_type(data) {
