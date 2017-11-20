@@ -130,9 +130,10 @@ var label = d3.arc()
 var pie = d3.pie()
             .value(function(d) { return d.value; });
 
-var projection = d3.geoRobinson()
-                  .translate([(width + margin.left + margin.right)/2, (height + margin.top + margin.bottom)/2 + 50])
-                  .scale(250)
+var projection = d3.geoMercator()
+                  .center([(width+margin.left+margin.right)/2, (height+margin.top+margin.bottom)/2])
+                  .translate([(width+margin.left+margin.right)/2, (height+margin.top+margin.bottom)/2])
+                  .scale(225)
 
 var map_path = d3.geoPath()
                  .projection(projection);
@@ -157,19 +158,42 @@ d3.queue()
   by_country = aggregate_by_country(results[0]);
   console.log(by_country); 
 
-  
+  console.log(results[1]);
 
-  g.selectAll("path")
-      .data(results[1].features)
-      .enter()
-      .append("path")
-      .attr("class", "country")
-      .attr("clip-path", "url(#map_area)")
-      .attr("d", map_path)
-      .style("fill", "steelblue")
-      .append("title")
-      .text(function(d) { return d.properties.sovereignt });
+  var country = g.selectAll("path")
+                  .data(results[1].features)
+                  .enter()
+                 .append("path")
+                  .attr("class", "country")
+                  .attr("clip-path", "url(#map_area)")
+                  .attr("d", map_path)
+                  .style("fill", "steelblue")
 
+  country.append("title")
+          .text(function(d) { return d.properties.name });
+
+  var centroids = g.selectAll(".centroid")
+                     .data(results[1].features)
+                     .enter()
+                    .append("circle")
+                     .attr("class", "centroid")
+                     .attr("clip-path", "url(#map_area)")
+                     .attr("r", 2)
+                     .attr("cx", function(d) { return map_path.centroid(d)[0]; })
+                     .attr("cy", function(d) { return map_path.centroid(d)[1]; })
+                    .append("title")
+                     .text(function(d) { return d.properties.name });
+
+  country_centroids = [];
+
+  results[1].features.forEach(function (country) {
+    centroid = map_path.centroid(country)
+    country_centroids.push({"country": country.properties.sovereignt,
+                            "centroid_x": centroid[0],
+                            "centroid_y": centroid[1]});
+  });
+
+  console.log(country_centroids)
 
 
 });
