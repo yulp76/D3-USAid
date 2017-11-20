@@ -120,14 +120,13 @@ var arc = d3.arc()
           .innerRadius(innerRadius)
           .outerRadius(outerRadius);
 var label = d3.arc()
-          .innerRadius(outerRadius-25)
-          .outerRadius(outerRadius-25);
+          .innerRadius(outerRadius-30)
+          .outerRadius(outerRadius-30);
 var pie = d3.pie()
             .value(function(d) { return d.value; });
 
 d3.csv("data/sample.csv", function(data) {
   agg = aggregate_by_type(data);
-  console.log(agg);
   donut_plot(agg);
 });
 
@@ -147,15 +146,16 @@ function donut_plot(data) {
               .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")");
 
   arcs.append("path")
-        .attr("fill", function(d, i) {
-            return color(i);
-        })
+        .attr("fill", function(d, i) { return color(i); })
         .attr("d", arc)
         .append("title")
-        .text(function(d) { return d.value})
+        .text(function(d) { return d.value});
 
   arcs.append("text")
-        //.attr("transform", function(d) { return "translate(" + label.centroid(d) + ")"; })
+        .attr("transform", function(d) { return "translate(" + label.centroid(d) + ")" +
+          'rotate(' + ((d.startAngle + d.endAngle) / 2) * 180 / Math.PI + ')'; })
         .attr("text-anchor", "middle")
-        .text(function(d) { return d.key; });
+        .attr("stroke", "white")
+        .attr("font-family", "Candara")
+        .text(function(d) { return d.data.key; });
 };
