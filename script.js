@@ -70,7 +70,7 @@ function sankey_plot(graph) {
   var links = svg1.append("g")
                    .attr("class", "links")
                    .attr("fill", "none")
-                   .attr("stroke", "green")
+                   .attr("stroke", "steelblue")
                    .attr("stroke-opacity", 0.2)
                  .selectAll("path");
 
@@ -114,6 +114,8 @@ svg2 = d3.select("#chart2")
            .attr("width", width + margin.left + margin.right)
            .attr("height", height + margin.top + margin.bottom);
 
+var g = svg2.append("g")
+
 var outerRadius = Math.min(width, height)/2;
 var innerRadius = outerRadius - 50;
 
@@ -133,19 +135,32 @@ var map_path = d3.geoPath()
                   .translate([(width + margin.left + margin.right)/2, (height + margin.top + margin.bottom)/2 + 50])
                   .scale([250]));
 
+svg2.append("clipPath")
+    .attr("id", "map_area")
+    .append("circle")
+    .attr("cx", margin.left+outerRadius)
+    .attr("cy", margin.top+outerRadius)
+    .attr("r", innerRadius)
+
+
 d3.csv("data/sample.csv", function(data) {
   agg = aggregate_by_type(data);
   donut_plot(agg);
 });
 
 d3.json("data/world.json", function(json) {
+
+  console.log(json)
   
-  svg2.selectAll("path")
+  g.selectAll("path")
       .data(json.features)
       .enter()
       .append("path")
+      .attr("clip-path", "url(#map_area)")
       .attr("d", map_path)
-      .style("fill", "steelblue");
+      .style("fill", "steelblue")
+      .append("title")
+      .text(function(d) { return d.properties.sovereignt});
 });
 
 function aggregate_by_type(data) {
@@ -161,7 +176,7 @@ function donut_plot(data) {
               .enter()
               .append("g")
               .attr("class", "arc")
-              .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")");
+              .attr("transform", "translate(" + (margin.left+outerRadius) + "," + (margin.top+outerRadius) + ")");
 
   arcs.append("path")
         .attr("fill", function(d, i) { return color(i); })
