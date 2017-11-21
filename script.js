@@ -1,30 +1,34 @@
-// Set Spacing Guidelines
 var margin = {top: 20, right: 20, bottom: 20, left: 20}
-var width = 800 - margin.left - margin.right;
-var height = 800 - margin.top - margin.bottom;
-var color = d3.scaleOrdinal(d3.schemeCategory20b);
+var svg_w = 800
+var svg_h = 800
+var width = svg_w - margin.left - margin.right;
+var height = svg_h - margin.top - margin.bottom;
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+
 
 // Visualization 1
+
 // Reference: https://bl.ocks.org/mbostock/ca9a0bb7ba204d12974bca90acc507c0
 
 //var group = "region"
 var group = "income_group";
 
-d3.csv("data/sample.csv", function(error, data) {
-  if (error) throw error;
-  graph = sankey_format(data);
-  sankey_plot(graph);
-});
-
-svg1 = d3.select("#chart1")
+var svg1 = d3.select("#chart1")
            .append("svg")
-           .attr("width", width + margin.left + margin.right)
-           .attr("height", height + margin.top + margin.bottom);
+           .attr("width", svg_w)
+           .attr("height", svg_h);
 
 var sankey_layout = d3.sankey()
     .nodeWidth(20)
     .nodePadding(20)
-    .extent([[margin.left,margin.top], [width-30, margin.top+height]]);
+    .extent([[margin.left,margin.top], [margin.left+width-50, margin.top+height]]);
+
+d3.csv("data/sample.csv", function(error, data) {
+  if (error) { throw error; }
+  graph = sankey_format(data);
+  sankey_plot(graph);
+  });
 
 /* Reference: http://www.d3noob.org/2013/02/formatting-data-for-sankey-diagrams-in.html */
 function sankey_format(data) {
@@ -65,20 +69,19 @@ function sankey_plot(graph) {
 
   var nodes = svg1.append("g")
                    .attr("class", "nodes")
-                 .selectAll("g");
+                  .selectAll("g");
 
   var links = svg1.append("g")
                    .attr("class", "links")
                    .attr("fill", "none")
                    .attr("stroke", "steelblue")
                    .attr("stroke-opacity", 0.2)
-                 .selectAll("path");
+                  .selectAll("path");
 
   links = links
     .data(graph.links)
     .enter().append("path")
       .attr("d", d3.sankeyLinkHorizontal())
-      .attr("border", "black")
       .attr("stroke-width", function(d) { return Math.max(1, d.width); });
 
   links.append("title")
@@ -108,42 +111,41 @@ function sankey_plot(graph) {
       .text(function(d) { return d.name + "\n" + d.value; });
 }
 
+
+
 // Visualization 2
-svg2 = d3.select("#chart2")
+
+var svg2 = d3.select("#chart2")
            .append("svg")
-           .attr("width", width + margin.left + margin.right)
-           .attr("height", height + margin.top + margin.bottom);
+           .attr("width", svg_w)
+           .attr("height", svg_h);
 
-var g = svg2.append("g")
+var g = svg2.append("g");
 
-var outerRadius = Math.min(width, height)/2;
-var innerRadius = outerRadius - 50;
-
-var arc = d3.arc()
-          .innerRadius(innerRadius)
-          .outerRadius(outerRadius);
-
-var label = d3.arc()
-          .innerRadius(outerRadius-30)
-          .outerRadius(outerRadius-30);
-
-var pie = d3.pie()
-            .value(function(d) { return d.value; });
-
-var projection = d3.geoMercator()
-                  .center([(width+margin.left+margin.right)/2, (height+margin.top+margin.bottom)/2])
-                  .translate([(width+margin.left+margin.right)/2, (height+margin.top+margin.bottom)/2])
-                  .scale(225)
-
-var map_path = d3.geoPath()
-                 .projection(projection);
+var R = Math.min(width, height)/2,
+    donut_w = 40,
+    innerR = R - donut_w;
 
 svg2.append("clipPath")
     .attr("id", "map_area")
     .append("circle")
-    .attr("cx", margin.left+outerRadius)
-    .attr("cy", margin.top+outerRadius)
-    .attr("r", innerRadius)
+    .attr("cx", svg_w/2)
+    .attr("cy", svg_h/2)
+    .attr("r", innerR)
+
+function draw_arc(outerR, innerR) {
+  return d3.arc()
+            .outerRadius(outerR)
+            .innerRadius(innerR);
+};
+
+var projection = d3.geoMercator()
+                  .center([svg_w/2, svg_h/2])
+                  .translate([svg_w/2, svg_h/2])
+                  .scale(200)
+
+var map_path = d3.geoPath()
+                 .projection(projection);
 
 
 d3.queue()
@@ -152,52 +154,61 @@ d3.queue()
   .awaitAll(function (error, results) {
     if (error) { throw error; }
 
-  by_type = aggregate_by_type(results[0]);
-  donut_plot(by_type);
+  byType = aggregate_by_type(results[0]);
+  donut_plot(byType);
 
-  by_country = aggregate_by_country(results[0]);
-  console.log(by_country); 
+  draw_map(results[1].features);
 
-  console.log(results[1]);
-
-  var country = g.selectAll("path")
-                  .data(results[1].features)
-                  .enter()
-                 .append("path")
-                  .attr("class", "country")
-                  .attr("clip-path", "url(#map_area)")
-                  .attr("d", map_path)
-                  .style("fill", "steelblue")
-
-  country.append("title")
-          .text(function(d) { return d.properties.name });
-
-  var centroids = g.selectAll(".centroid")
-                     .data(results[1].features)
-                     .enter()
-                    .append("circle")
-                     .attr("class", "centroid")
-                     .attr("clip-path", "url(#map_area)")
-                     .attr("r", 2)
-                     .attr("cx", function(d) { return map_path.centroid(d)[0]; })
-                     .attr("cy", function(d) { return map_path.centroid(d)[1]; })
-                    .append("title")
-                     .text(function(d) { return d.properties.name });
-
-  country_centroids = [];
-
+  var locate_country_centroid = d3.map();
   results[1].features.forEach(function (country) {
-    centroid = map_path.centroid(country)
-    country_centroids.push({"country": country.properties.sovereignt,
-                            "centroid_x": centroid[0],
-                            "centroid_y": centroid[1]});
-  });
+    locate_country_centroid.set(country.properties.name, map_path.centroid(country));
+    });
 
-  console.log(country_centroids)
+  byCountry = aggregate_by_country(results[0]);
+  byCountryTotal = byCountry[0];
+  byCountryType = byCountry[1];
 
+  console.log(byCountryType)
+  console.log(byCountryTotal)
+
+  var pie = d3.pie()
+              .value(function(d) { return d.value; });
+
+  var arc = draw_arc(10, 0);
+
+  var points = g.selectAll("g.country_point")
+                  .data(byCountryType)
+                  .enter()
+                .append("g")
+                  .attr("class", "country_point")
+                  .attr("transform", function(d) { return "translate(" + locate_country_centroid.get(d.key)[0] + "," +
+                        locate_country_centroid.get(d.key)[1] +")";});
+
+  var pies = points.selectAll(".country_pie")
+                      .data(function(d) { return pie(d.values); })
+                      .enter()
+                    .append("g")
+                      .attr("class", "country_pie")
+                      //.attr("clip-path", "url(#map_area)");
+
+  pies.append("path")
+        .attr("d", arc)
+          //var outerR = Math.sqrt(byCountryTotal[i].value/10000);
+          //console.log(outerR);
+          //var arc = draw_arc(outerR, 2);
+        .attr("fill", function(d) { return color(d.data.key); })
 
 });
-    
+
+
+/* Reference: https://stackoverflow.com/questions/12062561/calculate-svg-path-centroid-with-d3-js
+
+function getBoundingBoxCenter (selection) {
+  var bbox = selection.node().getBBox();
+  console.log([bbox.x + bbox.width/2, bbox.y + bbox.height/2]);
+}
+ */
+
 function aggregate_by_type(data) {
   return d3.nest()
   .key(function(d) { return d.dac_category_name; })
@@ -206,30 +217,40 @@ function aggregate_by_type(data) {
 };
 
 function aggregate_by_country(data) {
-  grouped = d3.nest()
-  .key(function(d) { return d.country_name; })
-  .entries(data);
+  byCountryTotal = d3.nest().key(function(d) { return d.country_name; })
+                        .rollup(function(v) { return d3.sum(v, function(d) { return d.constant_amount; }); })
+                        .entries(data)
 
-  grouped.forEach(function(country) {
+  byCountryType = d3.nest().key(function(d) { return d.country_name; }).entries(data)
+
+
+  byCountryType.forEach(function(country) {
     country.values = d3.nest()
     .key(function(d) { return d.dac_category_name; })
     .rollup(function(v) { return d3.sum(v, function(d) { return d.constant_amount; }); })
     .entries(country.values)
   });
 
-  return grouped
+  return [byCountryTotal, byCountryType] ;
 }
 
 function donut_plot(data) {
+
+  var arc = draw_arc(R, innerR),
+      label = draw_arc(R-25, R-25);
+
+  var pie = d3.pie()
+              .value(function(d) { return d.value; });
+
   var arcs = svg2.selectAll("g.arc")
               .data(pie(data))
               .enter()
               .append("g")
               .attr("class", "arc")
-              .attr("transform", "translate(" + (margin.left+outerRadius) + "," + (margin.top+outerRadius) + ")");
+              .attr("transform", "translate(" + svg_w/2 + "," + svg_h/2 + ")");
 
   arcs.append("path")
-        .attr("fill", function(d, i) { return color(i); })
+        .attr("fill", function(d) { return color(d.data.key); })
         .attr("d", arc)
         .append("title")
         .text(function(d) { return d.value});
@@ -241,4 +262,32 @@ function donut_plot(data) {
         .attr("stroke", "white")
         .attr("font-family", "Candara")
         .text(function(d) { return d.data.key; });
+};
+
+function draw_map(dataset) {
+  var country = g.selectAll(".country")
+                  .data(dataset)
+                  .enter()
+                 .append("path")
+                  .attr("class", "country")
+                  .attr("clip-path", "url(#map_area)")
+                  .attr("d", map_path)
+                  .attr("fill", "#969696");
+
+  country.append("title")
+          .text(function(d) { return d.properties.name });
+
+  /* 
+  var centroids = g.selectAll(".centroid")
+                     .data(dataset)
+                     .enter()
+                    .append("circle")
+                     .attr("class", "centroid")
+                     .attr("clip-path", "url(#map_area)")
+                     .attr("r", 2)
+                     .attr("cx", function(d) { return map_path.centroid(d)[0]; })
+                     .attr("cy", function(d) { return map_path.centroid(d)[1]; })
+                    .append("title")
+                     .text(function(d) { return d.properties.name });
+  */
 };
