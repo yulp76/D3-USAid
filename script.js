@@ -120,7 +120,8 @@ var svg2 = d3.select("#chart2")
            .attr("width", svg_w)
            .attr("height", svg_h);
 
-var g = svg2.append("g");
+var g = svg2.append("g")
+            .attr("clip-path", "url(#map_area)");
 
 var R = Math.min(width, height)/2,
     donut_w = 40,
@@ -139,10 +140,13 @@ function draw_arc(outerR, innerR) {
             .innerRadius(innerR);
 };
 
+var pie = d3.pie()
+            .value(function(d) { return d.value; });
+
 var projection = d3.geoMercator()
-                  .center([svg_w/2, svg_h/2])
-                  .translate([svg_w/2, svg_h/2])
-                  .scale(200)
+                  //.center([svg_w/2, svg_h/2])
+                  .translate([svg_w/5, svg_h/3*2])
+                  .scale(250)
 
 var map_path = d3.geoPath()
                  .projection(projection);
@@ -168,14 +172,6 @@ d3.queue()
   byCountryTotal = byCountry[0];
   byCountryType = byCountry[1];
 
-  console.log(byCountryType)
-  console.log(byCountryTotal)
-
-  var pie = d3.pie()
-              .value(function(d) { return d.value; });
-
-  var arc = draw_arc(10, 0);
-
   var points = g.selectAll("g.country_point")
                   .data(byCountryType)
                   .enter()
@@ -184,19 +180,27 @@ d3.queue()
                   .attr("transform", function(d) { return "translate(" + locate_country_centroid.get(d.key)[0] + "," +
                         locate_country_centroid.get(d.key)[1] +")";});
 
+  points.append("circle")
+          .attr("fill", "white")
+          .attr("r", 2)
+        .append("title")
+          .text(function(d) { return d.key });
+
   var pies = points.selectAll(".country_pie")
                       .data(function(d) { return pie(d.values); })
                       .enter()
                     .append("g")
-                      .attr("class", "country_pie")
-                      //.attr("clip-path", "url(#map_area)");
+                      .attr("class", "country_pie");
+
+  var arc = draw_arc(function(d){ return Math.max(4, Math.sqrt(byCountryTotal.get(d.data.mainkey)/10000));}, 3);
 
   pies.append("path")
         .attr("d", arc)
-          //var outerR = Math.sqrt(byCountryTotal[i].value/10000);
-          //console.log(outerR);
-          //var arc = draw_arc(outerR, 2);
-        .attr("fill", function(d) { return color(d.data.key); })
+        .attr("fill", function(d) { console.log(d); return color(d.data.key); })
+      .append("title")
+        .text(function(d) { return d.data.key + ":\n"
+          + d3.format(".0%")(d.data.value/byCountryTotal.get(d.data.mainkey))
+          + " of US$" + d3.format(".2s")(byCountryTotal.get(d.data.mainkey));})
 
 });
 
@@ -217,18 +221,23 @@ function aggregate_by_type(data) {
 };
 
 function aggregate_by_country(data) {
-  byCountryTotal = d3.nest().key(function(d) { return d.country_name; })
+  byCountry = d3.nest().key(function(d) { return d.country_name; })
                         .rollup(function(v) { return d3.sum(v, function(d) { return d.constant_amount; }); })
                         .entries(data)
+  var byCountryTotal = d3.map();
+  byCountry.forEach(function(country) {
+    byCountryTotal.set(country.key, country.value);
+  });
 
   byCountryType = d3.nest().key(function(d) { return d.country_name; }).entries(data)
-
-
   byCountryType.forEach(function(country) {
     country.values = d3.nest()
     .key(function(d) { return d.dac_category_name; })
     .rollup(function(v) { return d3.sum(v, function(d) { return d.constant_amount; }); })
     .entries(country.values)
+    country.values.forEach(function(d) {
+      d.mainkey = country.key;
+    })
   });
 
   return [byCountryTotal, byCountryType] ;
@@ -238,9 +247,6 @@ function donut_plot(data) {
 
   var arc = draw_arc(R, innerR),
       label = draw_arc(R-25, R-25);
-
-  var pie = d3.pie()
-              .value(function(d) { return d.value; });
 
   var arcs = svg2.selectAll("g.arc")
               .data(pie(data))
@@ -270,7 +276,6 @@ function draw_map(dataset) {
                   .enter()
                  .append("path")
                   .attr("class", "country")
-                  .attr("clip-path", "url(#map_area)")
                   .attr("d", map_path)
                   .attr("fill", "#969696");
 
@@ -283,7 +288,6 @@ function draw_map(dataset) {
                      .enter()
                     .append("circle")
                      .attr("class", "centroid")
-                     .attr("clip-path", "url(#map_area)")
                      .attr("r", 2)
                      .attr("cx", function(d) { return map_path.centroid(d)[0]; })
                      .attr("cy", function(d) { return map_path.centroid(d)[1]; })
