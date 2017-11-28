@@ -1,11 +1,49 @@
-var margin = {top: 20, right: 20, bottom: 20, left: 20}
-var svg_w = 800
-var svg_h = 800
-var width = svg_w - margin.left - margin.right;
-var height = svg_h - margin.top - margin.bottom;
-var color = d3.scaleOrdinal(d3.schemeCategory10);
+var chartsDiv = document.getElementById("charts"),
+    pageWidth = chartsDiv.clientWidth,
+    pageHeight = chartsDiv.clientHeight,
+    margin = {top: 5, right: 5, bottom: 5, left: 5},
+    sankeyWidth = pageWidth * 7/12,
+    mapWidth = pageWidth * 5/12,
+    svg_h = 600,
+    color = d3.scaleOrdinal(d3.schemeCategory10);
 
 
+var colorType = d3.scaleOrdinal()
+                  .domain(['Other', 'Agriculture', 'Economic Growth', 'Governance',
+                           'Infrastructure', 'Health and Population', 'Education',
+                            'Administrative Costs', 'Commodity Assistance', 'Humanitarian'])
+                  .range(["#d9d9d9", "#8dd3c7", "#b3de69", "#bebada", "#80b1d3",
+                          "#fccde5", "#ffffb3", "#bc80bd", "#fb8072","#fdb462"]),
+    colorIncome = d3.scaleOrdinal()
+                    .domain(['Low Income Country','Lower Middle Income Country', 
+                            'Upper Middle Income Country', 'High Income Country'])
+                    .range(["#b30000", "#fc8d59", "#fdd49e", "#7bccc4"]),
+    colorRegion = d3.scaleOrdinal()
+                    .domain(['Sub-Saharan Africa', 'Western Hemisphere', 'East Asia and Oceania',
+                             'South and Central Asia', 'Europe and Eurasia',
+                             'Middle East and North Africa'])
+                    .range(["#e41a1c","#377eb8","#4daf4a","#984ea3","#ff7f00","#ffff33"])
+
+
+var svg1 = d3.select("#chart1")
+           .append("svg")
+           .attr("width", sankeyWidth)
+           .attr("height", svg_h),
+    svg2 = d3.select("#chart2")
+           .append("svg")
+           .attr("width", mapWidth)
+           .attr("height", svg_h);
+
+// Read Data
+d3.queue()
+  .defer(d3.csv, 'data/sample.csv')
+  .defer(d3.json, 'data/world.json')
+  .awaitAll(load);
+
+function load(error, aid, world) {
+  if (error) { console.log(error); }
+
+  }
 
 // Visualization 1
 
@@ -14,50 +52,55 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
 //var group = "region"
 var group = "income_group";
 
-var svg1 = d3.select("#chart1")
-           .append("svg")
-           .attr("width", svg_w)
-           .attr("height", svg_h);
-
 var sankey_layout = d3.sankey()
-    .nodeWidth(20)
+    .nodeWidth(12)
     .nodePadding(20)
-    .extent([[margin.left,margin.top], [margin.left+width-50, margin.top+height]]);
+    .extent([[margin.left,margin.top], [sankeyWidth-50, svg_h-margin.bottom]]);
 
 d3.csv("data/sample.csv", function(error, data) {
   if (error) { throw error; }
-  graph = sankey_format(data);
+  graph = sankey_format(data, group);
+  console.log(graph);
   sankey_plot(graph);
   });
 
-/* Reference: http://www.d3noob.org/2013/02/formatting-data-for-sankey-diagrams-in.html */
-function sankey_format(data) {
 
-  graph = {"nodes":[], "links":[]};
+function sankey_format(data, criteria) {
+
+  var nodes = [],
+      graph = {"nodes":[], "links":[]};
+
+  function node(name) {
+    this.name=name;
+  };
+
+  function link(source, target, value, id) {
+    this.source=source;
+    this.target=target;
+    this.value=value;
+    this.id=id;
+  };
 
   data.forEach(function (d) {
-      graph.nodes.push({"name": d.implementing_agency_name},
-                       {"name": d.dac_category_name},
-                       {"name": d[group+"_name"]},
-                       {"name": d.country_name});
-      graph.links.push({"source": d.implementing_agency_name, "target": d.dac_category_name, "value": +d.constant_amount},
-                       {"source": d.dac_category_name, "target": d[group+"_name"], "value": +d.constant_amount},
-                       {"source": d[group+"_name"], "target": d.country_name, "value": +d.constant_amount});
+      names = [d.implementing_agency_name, d.dac_category_name,
+               d[group+"_name"], d.country_name];
+      names.forEach(function (name) {
+        if (!nodes.includes(name)) {
+                nodes.push(name);
+              };
+        graph.links.push(new link(names[0], names[1], d.constant_amount, d[3]),
+                         new link(names[1], names[2], d.constant_amount, d[3]),
+                         new link(names[2], names[3], d.constant_amount, d[3]));
+      });
+    });
 
-     });
-
-  //get an array of unique nodes
-  graph.nodes = d3.keys(d3.nest()
-       .key(function (d) { return d.name; })
-       .object(graph.nodes));  //entries vs. object vs. rollup vs. map!!!
-
-   graph.links.forEach(function (d, i) {
-        graph.links[i].source = graph.nodes.indexOf(graph.links[i].source);
-        graph.links[i].target = graph.nodes.indexOf(graph.links[i].target);
+  graph.links.forEach(function (link) {
+        link.source = nodes.indexOf(link.source);
+        link.target = nodes.indexOf(link.target);
         });
 
-  graph.nodes.forEach(function (d, i) {
-        graph.nodes[i] = {"name": d};
+  nodes.forEach(function(name) {
+    graph.nodes.push(new node(name));
   });
 
   return graph;
@@ -111,26 +154,19 @@ function sankey_plot(graph) {
       .text(function(d) { return d.name + "\n" + d.value; });
 }
 
-
-
 // Visualization 2
-
-var svg2 = d3.select("#chart2")
-           .append("svg")
-           .attr("width", svg_w)
-           .attr("height", svg_h);
 
 var g = svg2.append("g")
             .attr("clip-path", "url(#map_area)");
 
-var R = Math.min(width, height)/2,
+var R = Math.min(mapWidth, svg_h)/2,
     donut_w = 40,
     innerR = R - donut_w;
 
 svg2.append("clipPath")
     .attr("id", "map_area")
     .append("circle")
-    .attr("cx", svg_w/2)
+    .attr("cx", mapWidth/2)
     .attr("cy", svg_h/2)
     .attr("r", innerR)
 
@@ -145,7 +181,7 @@ var pie = d3.pie()
 
 var projection = d3.geoMercator()
                   //.center([svg_w/2, svg_h/2])
-                  .translate([svg_w/5, svg_h/3*2])
+                  .translate([mapWidth/5, svg_h/3*2])
                   .scale(250)
 
 var map_path = d3.geoPath()
@@ -253,7 +289,7 @@ function donut_plot(data) {
               .enter()
               .append("g")
               .attr("class", "arc")
-              .attr("transform", "translate(" + svg_w/2 + "," + svg_h/2 + ")");
+              .attr("transform", "translate(" + mapWidth/2 + "," + svg_h/2 + ")");
 
   arcs.append("path")
         .attr("fill", function(d) { return color(d.data.key); })
