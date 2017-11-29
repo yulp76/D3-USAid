@@ -28,6 +28,8 @@ var type = colorType.domain(),
     income = colorIncome.domain(),
     region = colorRegion.domain();
 
+var country = ["Vietnam","Brazil","Kenya","Nigeria"]
+
 var svg1 = d3.select("#chart1")
            .append("svg")
            .attr("width", sankeyWidth)
@@ -129,12 +131,11 @@ function plot_sankey(graph) {
                     .enter()
                     .append("path")
                     .attr("d", d3.sankeyLinkHorizontal())
-                    .attr("class", "link")
-                    .attr("class", function(link) { return link.id; })
+                    .attr("class", function(d) { return "link "+d.id; })
                     .attr("fill", "none")
-                    .attr("stroke", function(link) { return getColor(link.source.name)})
+                    .attr("stroke", function(d) { return getColor(d.source.name)})
                     .attr("stroke-opacity", 0.3)
-                    .attr("stroke-width", function(link) { return Math.max(1, link.width); })
+                    .attr("stroke-width", function(d) { return Math.max(1, d.width); })
                     //.sort(function(a, b) { return b.dy - a.dy; });                    
 
       links.on("mouseover", function() {
@@ -159,29 +160,49 @@ function plot_sankey(graph) {
                   .call(d3.drag()
                           .on("drag", dragging));
 
-  nodes.append("rect")
-      .attr("height", function(d) { return d.y1 - d.y0; })
-      .attr("width", function(d) { return d.x1 - d.x0; })
-      .attr("fill", function(d) { return getColor(d.name); })
-      .attr("opacity", 0.8)
-      .attr("stroke", "black");
+      nodes.append("rect")
+          .attr("class", function(d){
+            if (country.includes(d.name)) {
+              return "country "+d.name;
+            } else { return "non-country"; }
+          })
+          .attr("height", function(d) { return d.y1 - d.y0; })
+          .attr("width", function(d) { return d.x1 - d.x0; })
+          .attr("fill", function(d) { return getColor(d.name); })
+          .attr("opacity", 0.8)
+          .attr("stroke", "black")
 
-  nodes.append("text")
-      //.attr("class", "text")
-      .attr("x", function(d) { return 14; })
-      .attr("y", function(d) { return (d.y1-d.y0)/2; })
-      .attr("dy", ".35em") //reference
-      .attr("font-family", "Candara")
-      .attr("text-anchor", "start")
-      .text(function(d) { return d.name; })
+      nodes.append("text")
+          .attr("x", function(d) { return 14; })
+          .attr("y", function(d) { return (d.y1-d.y0)/2; })
+          .attr("dy", ".35em") //reference
+          .attr("font-family", "Candara")
+          .attr("text-anchor", "start")
+          .text(function(d) { return d.name; })
 
+      nodes.append("title")
+          .text(function(d) { return d.name + "\n" + d.value; });
 
-  nodes.append("title")
-      .text(function(d) { return d.name + "\n" + d.value; });
+      d3.selectAll(".node .country")
+        .on("mouseover", function() {
+                      d3.select(this)
+                        .attr("opacity", 1);
+                      country = d3.select(this).attr("class").slice(8);
+                      console.log(country)
+                      d3.selectAll(".link."+country)
+                        .attr("stroke-opacity", 1);
+                    })
+         .on("mouseout", function() {
+                      d3.select(this)
+                        .attr("opacity", 0.8);
+                      country = d3.select(this).attr("class").slice(8);
+                      d3.selectAll(".link."+country)
+                        .attr("stroke-opacity", 0.3);
+                     });
 
   function dragging(d) {
     var height = d.y1-d.y0
-    d.y0 = Math.max(0, Math.min(svg_h-margin.top-margin.bottom-d.y1, d3.event.y))
+    d.y0 = Math.max(margin.top, Math.min(svg_h-margin.bottom-height, d.y0+d3.event.dy))
     d.y1 = d.y0+height
     d3.select(this)
       .attr("transform", "translate(" + d.x0 + "," + d.y0 + ")");
@@ -189,7 +210,6 @@ function plot_sankey(graph) {
     links.attr("d", d3.sankeyLinkHorizontal());
   };
 }
-
 
 function wrap(text, width) {
   text.each(function() {
