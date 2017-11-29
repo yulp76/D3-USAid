@@ -429,6 +429,11 @@ function drawMap(dataset) {
 	      	  .selectAll("circle")
 	      	  .attr("r", 2*k);
 
+	      centroid = getCentroid(polygons);
+	      gMap.selectAll('.countryPie')
+              .attr("transform", function(d) { return "translate(" + centroid.get(d.key)[0] + "," +
+                    centroid.get(d.key)[1] +")";});
+
 
 	    } else {
 	      var dx = d3.event.sourceEvent.movementX,
