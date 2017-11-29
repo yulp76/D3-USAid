@@ -67,14 +67,16 @@ var sankey_layout = d3.sankey()
 var pie = d3.pie()
             .value(function(d) { return d.value; });
 
+var originalScale = 250,
+    scale = originalScale;
 var projection = d3.geoOrthographic()
-			    .scale(height/2.4) 
+			    .scale(originalScale)
 			    .translate([mapWidth/2, height/2])
-			    .clipAngle(90),
+			    //.clipAngle(90),	
 
     map_path = d3.geoPath()
                  .projection(projection)
-                 .pointRadius(1);
+                 //.pointRadius(1);
 
 
 d3.queue()
@@ -101,11 +103,6 @@ function load(error, aid, world) {
   plotDonut(byType);  
   drawMap(world.features);
   drawCountryPie(centroid, byCountryType, byCountryTotal);
-
-
-
-
-
   
   }
 
@@ -236,7 +233,19 @@ function plotSankey(graph) {
                       country = d3.select(this).attr("class").slice(8);
                       d3.selectAll(".link."+country)
                         .attr("stroke-opacity", 0.3);
-                     });
+                      gMap.select("."+country)
+					      .selectAll(".pie")
+					      .selectAll("path")
+					      .attr("opacity", 0.5);
+                     })
+         .on("click", function(){
+					  country = d3.select(this).attr("class").slice(8);
+					  gMap.select("."+country)
+					      .selectAll(".pie")
+					      .selectAll("path")
+					      .attr("opacity", 1);
+	     //doesn't work when switching mouseout and click -- WHY???
+         })
 
   function dragging(d) {
     var node_h = d.y1-d.y0
@@ -272,7 +281,6 @@ function wrap(text, width) {
     }
   });
 }
-
 
 
 //Viz 2 Functions
@@ -335,6 +343,7 @@ function plotDonut(data) {
 
   arcs.append("path")
         .attr("fill", function(d) { return getColor(d.data.key); })
+        .attr("stroke", "black")
         .attr("d", arc)
         .append("title")
         .text(function(d) { return d.value});
@@ -348,11 +357,17 @@ function plotDonut(data) {
         .text(function(d) { return d.data.key; });
 };
 
-//Reference: https://bl.ocks.org/larsvers/f8efeabf480244d59001310f70815b4e
+
 function drawMap(dataset) {
 
 	var graticule = d3.geoGraticule(),
 	    grid = graticule();
+
+	    gMap.append("circle")
+	    	.attr("cx", mapWidth/2)
+	    	.attr("cy", height/2)
+	    	.attr("r", innerR)
+	    	.attr("opacity", 0)
 
 	    gMap.selectAll('.grid')
 			.data([grid])
@@ -369,7 +384,7 @@ function drawMap(dataset) {
 	                	.data(dataset)
 	                  	.enter()
 	                	 .append("path")
-	                 	 .attr("class", "country")
+	                 	 .classed("country", true)
 	             	     .classed('world', true)
 	                 	 .attr("d", map_path)
 	                 	 .attr("fill", "#e5f5e0")
@@ -378,38 +393,37 @@ function drawMap(dataset) {
 
 	country.append("title")
 	          .text(function(d) { return d.properties.name });
-    
 
     var zoom = d3.zoom()
-				    .scaleExtent([2, 8])
-				    .on("zoom", zoomed)
-
+    			 .scaleExtent([1, 5])
+				 .on("zoom", zooming);
+    
   	d3.select('.map').call(zoom);
 
-  	var previousScaleFactor = 1; 
-
-  	function zoomed() {
-	    var dx = d3.event.sourceEvent.movementX;
-	    var dy = d3.event.sourceEvent.movementY;
-	    var event = d3.event.sourceEvent.type;
-	        
-	    if (event === 'wheel') {
+    var previousFactor = 1;
+    //Reference: https://bl.ocks.org/larsvers/f8efeabf480244d59001310f70815b4e 
+  	function zooming() {        
+	    if (d3.event.sourceEvent.type === 'wheel') {
 	      
-	      scaleFactor = d3.event.transform.k; 
-	      scaleChange = scaleFactor - previousScaleFactor;
-	      scale = height/2.4 + scaleChange/2.4;
-	      projection.scale(scale);
-	      previousScaleFactor = scaleFactor;
+	      scaleFactor = d3.event.transform.k;
+	      scaleChange = scaleFactor-previousFactor;
+	      scale += originalScale*scaleChange;
 
-	      d3.selectAll('.world').attr('d', map_path);
+	      projection.scale(scale);
+	      previousFactor = scaleFactor;
+
+	      gMap.selectAll('.world').attr('d', map_path);
+	      //gMap.selectAll('.countryPie')
+
 
 	    } else {
-
-	      var r = projection.rotate();
-	      rotation = [r[0] + dx * 0.4, r[1] - dy * 0.5, r[2]];
+	      var dx = d3.event.sourceEvent.movementX,
+	          dy = d3.event.sourceEvent.movementY,
+	          r = projection.rotate();
+	      rotation = [r[0] + dx * 0.4, r[1] - dy * 0.5, r[2]]; //Why???
 	      projection.rotate(rotation);
 
-	      d3.selectAll('.world').attr('d', map_path);
+	      gMap.selectAll('.world').attr('d', map_path);
 
     }
   
@@ -418,13 +432,20 @@ function drawMap(dataset) {
 
 
 function drawCountryPie(centroid, byCountryType, byCountryTotal){
-  var points = gMap.selectAll(".centroid")
+  var points = gMap.selectAll(".countryPie")
                   .data(byCountryType)
                   .enter()
                 .append("g")
-                  .attr("class", function(d) { return "centroid "+d.key; })
+                  .attr("class", "countryPie")
+                  .attr("class", function(d) { return d.key; })
                   .attr("transform", function(d) { return "translate(" + centroid.get(d.key)[0] + "," +
                         centroid.get(d.key)[1] +")";});
+  
+	  points.append("circle")
+	          .attr("fill", "#a50f15")
+	          .attr("r", 2)
+	        .append("title")
+	          .text(function(d) { return d.key });
   
   var pies = points.selectAll(".pie")
                       .data(function(d) { return pie(d.values); })
@@ -432,18 +453,12 @@ function drawCountryPie(centroid, byCountryType, byCountryTotal){
                     .append("g")
                       .attr("class", "pie");
   
-  points.append("circle")
-          .attr("fill", "#a50f15")
-          .attr("r", 2)
-        .append("title")
-          .text(function(d) { return d.key });
-
   var arc = drawArc(function(d){ return Math.max(4, Math.sqrt(byCountryTotal.get(d.data.mainkey)/10000));}, 3);
 
   pies.append("path")
         .attr("d", arc)
         .attr("fill", function(d) { return getColor(d.data.key); })
-        .attr("opacity", 0.75)
+        .attr("opacity", 0.5)
         .attr("stroke", "black")
       .append("title")
         .text(function(d) { return d.data.key + ":\n"
