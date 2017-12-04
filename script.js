@@ -82,6 +82,7 @@ var map_path = d3.geoPath()
 //Load
 d3.queue()
   .defer(d3.csv, 'data/sample.csv')
+  .defer(d3.csv, 'data/sample2.csv')
   .defer(d3.json, 'data/world.json')
   .await(load);
 

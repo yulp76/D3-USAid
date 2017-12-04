@@ -10,13 +10,52 @@
 
 <body>
 
-<div class="main section">
-  <div id = "charts" class="container">
-      <div id="chart1" class="col-md-7"></div>
-      <div id="chart2" class="col-md-5"></div>
+<div class="container-fluid" style="width: 1320px;">
+  <div class = "row">
+      <div class="col-md-3">  
+        <select multiple required>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <input type="checkbox" name="category" value="Cat 1"> 1  
+        <input type="checkbox" name="category" value="Cat 2"> 2 <br> 
+        <input type="checkbox" name="category" value="Cat 3"> 3  
+        <input type="checkbox" name="category" value="Cat 4"> 4 <br> 
+        <input type="checkbox" name="category" value="Cat 5"> 5  
+        <input type="checkbox" name="category" value="Cat 6"> 6 <br>     
+        <input type="checkbox" name="category" value="Cat 6"> 7   
+        <input type="checkbox" name="category" value="Cat 6"> 8 <br>  
+        <input type="checkbox" name="category" value="Cat 6"> 9   
+        <input type="checkbox" name="category" value="Cat 6"> 10 <br>                         
+      </div>
+      <div class="col-md-3">
+        <input type="radio" name="group" value="income_group" checked> Income Level <br>
+        <input type="radio" name="group" value="region"> Region <br>
+      </div>
+      <div class="col-md-3">
+        <select multiple required>
+        </select>
+      </div> 
+  </div>
+
+<br> 
+  <div class="row">
+      <svg id="chart1" class="col-md-7"></svg>
+      <svg id="chart2" class="col-md-5"></svg>
+  </div>
+
+<br>  
+  <div class = "row">
+      <div class="col-md-6" style="float: right;">
+          <label for="year">
+             YEAR <span id="year-value">2015</span>
+          </label>
+           <input type="range" min="2001" max="2015" value="2015" step="1" id="year">
+      </div>
   </div>
 </div>
-<script src="lib/d3.min.js"></script>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="lib/d3-sankey.min.js"></script>
 <script src="lib/topojson.min.js"></script>
 <script src="lib/d3-geo-projection.min.js"></script>
