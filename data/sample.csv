@@ -1,9 +1,108 @@
 implementing_agency_name,numeric_year,country_name,dac_category_name,region_name,income_group_name,constant_amount
+African Development Foundation,2001,Nigeria,Other,Sub-Saharan Africa,Lower Middle Income Country,1027141
+African Development Foundation,2002,Nigeria,Agriculture,Sub-Saharan Africa,Lower Middle Income Country,388579
+African Development Foundation,2002,Nigeria,Economic Growth,Sub-Saharan Africa,Lower Middle Income Country,1518544
+African Development Foundation,2002,Nigeria,Governance,Sub-Saharan Africa,Lower Middle Income Country,428055
+African Development Foundation,2002,Nigeria,Health and Population,Sub-Saharan Africa,Lower Middle Income Country,165340
+African Development Foundation,2004,Nigeria,Economic Growth,Sub-Saharan Africa,Lower Middle Income Country,118348
+African Development Foundation,2004,Nigeria,Governance,Sub-Saharan Africa,Lower Middle Income Country,398832
+African Development Foundation,2004,Nigeria,Other,Sub-Saharan Africa,Lower Middle Income Country,382162
+African Development Foundation,2005,Nigeria,Governance,Sub-Saharan Africa,Lower Middle Income Country,104968
+African Development Foundation,2005,Nigeria,Other,Sub-Saharan Africa,Lower Middle Income Country,481752
+African Development Foundation,2006,Nigeria,Economic Growth,Sub-Saharan Africa,Lower Middle Income Country,167843
+African Development Foundation,2006,Nigeria,Governance,Sub-Saharan Africa,Lower Middle Income Country,1467324
+African Development Foundation,2006,Nigeria,Other,Sub-Saharan Africa,Lower Middle Income Country,423018
+African Development Foundation,2007,Nigeria,Administrative Costs,Sub-Saharan Africa,Lower Middle Income Country,205131
+African Development Foundation,2007,Nigeria,Other,Sub-Saharan Africa,Lower Middle Income Country,149140
+African Development Foundation,2008,Nigeria,Administrative Costs,Sub-Saharan Africa,Lower Middle Income Country,386967
+African Development Foundation,2008,Nigeria,Agriculture,Sub-Saharan Africa,Lower Middle Income Country,122303
+African Development Foundation,2008,Nigeria,Economic Growth,Sub-Saharan Africa,Lower Middle Income Country,656627
+African Development Foundation,2008,Nigeria,Other,Sub-Saharan Africa,Lower Middle Income Country,192703
+African Development Foundation,2009,Nigeria,Agriculture,Sub-Saharan Africa,Lower Middle Income Country,398127
+African Development Foundation,2009,Nigeria,Economic Growth,Sub-Saharan Africa,Lower Middle Income Country,301930
+African Development Foundation,2009,Nigeria,Governance,Sub-Saharan Africa,Lower Middle Income Country,975615
+African Development Foundation,2009,Nigeria,Other,Sub-Saharan Africa,Lower Middle Income Country,280548
+African Development Foundation,2010,Nigeria,Agriculture,Sub-Saharan Africa,Lower Middle Income Country,731157
+African Development Foundation,2010,Nigeria,Economic Growth,Sub-Saharan Africa,Lower Middle Income Country,260463
+African Development Foundation,2010,Nigeria,Governance,Sub-Saharan Africa,Lower Middle Income Country,116227
+African Development Foundation,2010,Nigeria,Other,Sub-Saharan Africa,Lower Middle Income Country,415923
+African Development Foundation,2011,Kenya,Agriculture,Sub-Saharan Africa,Lower Middle Income Country,291650
+African Development Foundation,2011,Nigeria,Agriculture,Sub-Saharan Africa,Lower Middle Income Country,1076106
+African Development Foundation,2011,Nigeria,Economic Growth,Sub-Saharan Africa,Lower Middle Income Country,314373
+African Development Foundation,2011,Nigeria,Governance,Sub-Saharan Africa,Lower Middle Income Country,553358
+African Development Foundation,2011,Nigeria,Other,Sub-Saharan Africa,Lower Middle Income Country,488434
+African Development Foundation,2012,Kenya,Agriculture,Sub-Saharan Africa,Lower Middle Income Country,1145024
+African Development Foundation,2012,Kenya,Economic Growth,Sub-Saharan Africa,Lower Middle Income Country,187502
+African Development Foundation,2012,Kenya,Other,Sub-Saharan Africa,Lower Middle Income Country,500850
+African Development Foundation,2012,Nigeria,Agriculture,Sub-Saharan Africa,Lower Middle Income Country,555019
+African Development Foundation,2012,Nigeria,Economic Growth,Sub-Saharan Africa,Lower Middle Income Country,365344
+African Development Foundation,2012,Nigeria,Governance,Sub-Saharan Africa,Lower Middle Income Country,173802
+African Development Foundation,2012,Nigeria,Other,Sub-Saharan Africa,Lower Middle Income Country,717961
+African Development Foundation,2013,Kenya,Agriculture,Sub-Saharan Africa,Lower Middle Income Country,935549
+African Development Foundation,2013,Kenya,Economic Growth,Sub-Saharan Africa,Lower Middle Income Country,208789
+African Development Foundation,2013,Kenya,Other,Sub-Saharan Africa,Lower Middle Income Country,413541
+African Development Foundation,2013,Nigeria,Agriculture,Sub-Saharan Africa,Lower Middle Income Country,560652
+African Development Foundation,2013,Nigeria,Economic Growth,Sub-Saharan Africa,Lower Middle Income Country,268733
+African Development Foundation,2013,Nigeria,Other,Sub-Saharan Africa,Lower Middle Income Country,629690
+African Development Foundation,2014,Kenya,Agriculture,Sub-Saharan Africa,Lower Middle Income Country,1594533
+African Development Foundation,2014,Kenya,Economic Growth,Sub-Saharan Africa,Lower Middle Income Country,102254
+African Development Foundation,2014,Kenya,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,140912
+African Development Foundation,2014,Kenya,Other,Sub-Saharan Africa,Lower Middle Income Country,255059
+African Development Foundation,2014,Nigeria,Agriculture,Sub-Saharan Africa,Lower Middle Income Country,260893
+African Development Foundation,2014,Nigeria,Economic Growth,Sub-Saharan Africa,Lower Middle Income Country,286847
+African Development Foundation,2014,Nigeria,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,102387
 African Development Foundation,2015,Kenya,Agriculture,Sub-Saharan Africa,Lower Middle Income Country,809316
 African Development Foundation,2015,Kenya,Economic Growth,Sub-Saharan Africa,Lower Middle Income Country,219947
 African Development Foundation,2015,Kenya,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,481987
 African Development Foundation,2015,Nigeria,Agriculture,Sub-Saharan Africa,Lower Middle Income Country,489614
 African Development Foundation,2015,Nigeria,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,369394
+Department of Commerce,2006,Vietnam,Economic Growth,East Asia and Oceania,Lower Middle Income Country,116296
+Department of Commerce,2007,Vietnam,Economic Growth,East Asia and Oceania,Lower Middle Income Country,210502
+Department of Commerce,2009,Brazil,Economic Growth,Western Hemisphere,Upper Middle Income Country,743120
+Department of Commerce,2012,Brazil,Economic Growth,Western Hemisphere,Upper Middle Income Country,101580
+Department of Energy,2007,Brazil,Infrastructure,Western Hemisphere,Upper Middle Income Country,720220
+Department of Energy,2007,Nigeria,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,201402
+Department of Energy,2007,Vietnam,Infrastructure,East Asia and Oceania,Lower Middle Income Country,2748602
+Department of Energy,2008,Brazil,Infrastructure,Western Hemisphere,Upper Middle Income Country,1973968
+Department of Energy,2008,Kenya,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,112548
+Department of Energy,2008,Nigeria,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,337238
+Department of Energy,2008,Vietnam,Infrastructure,East Asia and Oceania,Lower Middle Income Country,2850788
+Department of Energy,2009,Kenya,Governance,Sub-Saharan Africa,Lower Middle Income Country,813597
+Department of Energy,2009,Kenya,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,173514
+Department of Energy,2009,Nigeria,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,450781
+Department of Energy,2009,Vietnam,Governance,East Asia and Oceania,Lower Middle Income Country,383364
+Department of Energy,2009,Vietnam,Infrastructure,East Asia and Oceania,Lower Middle Income Country,1313227
+Department of Energy,2010,Brazil,Infrastructure,Western Hemisphere,Upper Middle Income Country,450679
+Department of Energy,2010,Kenya,Governance,Sub-Saharan Africa,Lower Middle Income Country,8074133
+Department of Energy,2010,Kenya,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,303823
+Department of Energy,2010,Nigeria,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,316060
+Department of Energy,2010,Vietnam,Governance,East Asia and Oceania,Lower Middle Income Country,265868
+Department of Energy,2010,Vietnam,Infrastructure,East Asia and Oceania,Lower Middle Income Country,7590906
+Department of Energy,2011,Brazil,Infrastructure,Western Hemisphere,Upper Middle Income Country,400780
+Department of Energy,2011,Kenya,Governance,Sub-Saharan Africa,Lower Middle Income Country,6409489
+Department of Energy,2011,Kenya,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,346439
+Department of Energy,2011,Nigeria,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,493239
+Department of Energy,2011,Vietnam,Governance,East Asia and Oceania,Lower Middle Income Country,872359
+Department of Energy,2011,Vietnam,Infrastructure,East Asia and Oceania,Lower Middle Income Country,3336654
+Department of Energy,2012,Brazil,Economic Growth,Western Hemisphere,Upper Middle Income Country,201439
+Department of Energy,2012,Brazil,Infrastructure,Western Hemisphere,Upper Middle Income Country,319987
+Department of Energy,2012,Kenya,Governance,Sub-Saharan Africa,Lower Middle Income Country,1450691
+Department of Energy,2012,Kenya,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,281929
+Department of Energy,2012,Nigeria,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,381197
+Department of Energy,2012,Vietnam,Governance,East Asia and Oceania,Lower Middle Income Country,7290981
+Department of Energy,2012,Vietnam,Infrastructure,East Asia and Oceania,Lower Middle Income Country,10867848
+Department of Energy,2013,Brazil,Infrastructure,Western Hemisphere,Upper Middle Income Country,122731
+Department of Energy,2013,Kenya,Governance,Sub-Saharan Africa,Lower Middle Income Country,681001
+Department of Energy,2013,Kenya,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,431107
+Department of Energy,2013,Nigeria,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,523673
+Department of Energy,2013,Vietnam,Governance,East Asia and Oceania,Lower Middle Income Country,2824007
+Department of Energy,2013,Vietnam,Infrastructure,East Asia and Oceania,Lower Middle Income Country,18538864
+Department of Energy,2014,Brazil,Infrastructure,Western Hemisphere,Upper Middle Income Country,108576
+Department of Energy,2014,Kenya,Governance,Sub-Saharan Africa,Lower Middle Income Country,446069
+Department of Energy,2014,Kenya,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,526952
+Department of Energy,2014,Nigeria,Infrastructure,Sub-Saharan Africa,Lower Middle Income Country,111993
+Department of Energy,2014,Vietnam,Governance,East Asia and Oceania,Lower Middle Income Country,480520
+Department of Energy,2014,Vietnam,Infrastructure,East Asia and Oceania,Lower Middle Income Country,1662912
 Department of Energy,2015,Brazil,Economic Growth,Western Hemisphere,Upper Middle Income Country,178606
 Department of Energy,2015,Brazil,Infrastructure,Western Hemisphere,Upper Middle Income Country,459993
 Department of Energy,2015,Kenya,Economic Growth,Sub-Saharan Africa,Lower Middle Income Country,165956
@@ -12,4 +111,21 @@ Department of Energy,2015,Kenya,Infrastructure,Sub-Saharan Africa,Lower Middle I
 Department of Energy,2015,Vietnam,Economic Growth,East Asia and Oceania,Lower Middle Income Country,117384
 Department of Energy,2015,Vietnam,Governance,East Asia and Oceania,Lower Middle Income Country,524243
 Department of Energy,2015,Vietnam,Infrastructure,East Asia and Oceania,Lower Middle Income Country,1868192
+Department of Labor,2003,Brazil,Governance,Western Hemisphere,Upper Middle Income Country,12217071
+Department of Labor,2004,Brazil,Governance,Western Hemisphere,Upper Middle Income Country,1882752
+Department of Labor,2004,Kenya,Governance,Sub-Saharan Africa,Lower Middle Income Country,6275839
+Department of Labor,2005,Brazil,Governance,Western Hemisphere,Upper Middle Income Country,2433882
+Department of Labor,2005,Nigeria,Health and Population,Sub-Saharan Africa,Lower Middle Income Country,138517
+Department of Labor,2005,Vietnam,Health and Population,East Asia and Oceania,Lower Middle Income Country,721512
+Department of Labor,2006,Nigeria,Health and Population,Sub-Saharan Africa,Lower Middle Income Country,176604
+Department of Labor,2006,Vietnam,Health and Population,East Asia and Oceania,Lower Middle Income Country,271077
+Department of Labor,2007,Nigeria,Health and Population,Sub-Saharan Africa,Lower Middle Income Country,272976
+Department of Labor,2007,Vietnam,Health and Population,East Asia and Oceania,Lower Middle Income Country,222638
+Department of Labor,2008,Brazil,Governance,Western Hemisphere,Upper Middle Income Country,5508225
+Department of Labor,2008,Nigeria,Health and Population,Sub-Saharan Africa,Lower Middle Income Country,123026
+Department of Labor,2008,Vietnam,Health and Population,East Asia and Oceania,Lower Middle Income Country,143993
+Department of Labor,2009,Kenya,Governance,Sub-Saharan Africa,Lower Middle Income Country,5111520
+Department of Labor,2011,Vietnam,Governance,East Asia and Oceania,Lower Middle Income Country,2309787
+Department of Labor,2012,Vietnam,Governance,East Asia and Oceania,Lower Middle Income Country,1060204
+Department of Labor,2013,Vietnam,Governance,East Asia and Oceania,Lower Middle Income Country,521299
 Department of Labor,2015,Vietnam,Governance,East Asia and Oceania,Lower Middle Income Country,673037
