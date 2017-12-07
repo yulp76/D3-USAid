@@ -50,7 +50,7 @@ var pie = d3.pie()
               .attr("stroke", "black")
               .attr("transform", "translate(" + (mapWidth-R) + "," + height/2 + ")")
               .append("title")
-              .text(function(d) { return d.data.key + "\nUS$" + d3.format(".2s")(d.value)});
+              .text(function(d) { return d.data.key; });
 };
 
 
@@ -112,9 +112,7 @@ var isVisible = {
 
 function drawCountryPie() {
   var points = gMap.selectAll(".countryPie")
-                  .data(byCountryCategory, function(d) {
-                       return d.key;
-                      })
+                  .data(byCountryCategory, function(d) { return d.key; })
                   .enter()
                 .append("g")
                   .attr("class", function(d) { return className(d.key); })

@@ -34,6 +34,8 @@ var zoom = d3.zoom()
              .on("zoom", zooming);
 var wheel_k = 1;
 var map_k = 1;
+var init = true;
+var group = "region";
 
 //Map projection
 var projection = d3.geoOrthographic()
@@ -43,11 +45,6 @@ var projection = d3.geoOrthographic()
 
 var map_path = d3.geoPath()
                  .projection(projection);
-
-//temp ones
-var group = "income_group";
-var recipient = ["Vietnam","Brazil","Kenya","Nigeria"]
-var donor = ["African Development Foundation", "Department of Energy", "Department of Labor"]
 
 /*
 var chartsDiv = document.getElementById("charts"),
@@ -103,6 +100,11 @@ d3.queue()
 function load(error, aid, world) {
   if (error) { console.log(error); }
 
+  countries = world.features;
+  centroid = getCentroid(countries);
+
+  //populate donors/recipients
+  var dataAllYears;
   donor = [];
   recipient = [];
 
@@ -133,44 +135,68 @@ function load(error, aid, world) {
     .text(function(d) { return d; })
     .attr("value", function (d) { return d; });
 
-  d3.select("#donor select")
-    .on("input", function(d) {
-      console.log(this.value);
-    })
 
-  data = aid.filter(function(d) { return d.numeric_year == 2015; })
+  d3.select("#generate")
+    .on("click", function(){
+      selectedDonor = [];
+      selectedRecipient = [];
+      selectedCategory = [];
 
-  //local variables from data
-  countries = world.features;
-  centroid = getCentroid(countries);
-  graph = sankeyFormat(data, group);
+      d3.select("#donor")
+        .selectAll("option")
+        .filter(function () { return this.selected; })
+        .each(function () { selectedDonor.push(this.value); });
+      d3.select("#recipient")
+        .selectAll("option")
+        .filter(function () { return this.selected; })
+        .each(function () { selectedRecipient.push(this.value); });
+      d3.select("#category")
+        .selectAll("input")
+        .filter(function () { return d3.select(this).property("checked"); })
+        .each(function () { selectedCategory.push(d3.select(this).property("value")); });
+      d3.select("#group")
+        .selectAll("input")
+        .filter(function () { return d3.select(this).property("checked"); })
+        .each(function () { group = d3.select(this).property("value"); });
+      year = parseInt(d3.select("#year").property("value"));
+      dataAllYears = aid.filter(function(d) { return (selectedDonor.includes(d.implementing_agency_name)) &&
+                                             (selectedRecipient.includes(d.country_name)) &&
+                                             (selectedCategory.includes(d.dac_category_name)); });
+      data = dataAllYears.filter(function(d) { return d.numeric_year == year; });
 
-  byCategory = aggregateCategory(data); 
-  byCountry = aggregateCountry(data);
-  byCountryTotal = byCountry[0];
-  byCountryCategory = byCountry[1];
+      byCategory = aggregateCategory(data); 
+      byCountry = aggregateCountry(data);
+      byCountryTotal = byCountry[0];
+      byCountryCategory = byCountry[1];
+      graph = sankeyFormat(data, group);     
+      
+      if (init) {
+            plotSankey(graph);
+            plotDonut(byCategory);
+            drawMap(countries);
+            drawCountryPie();
+            init = false;
+      } else { update(); };
 
-  plotSankey(graph);
-  plotDonut(byCategory);
-  drawMap(countries);
-  drawCountryPie();
-  sankeyMotion();  
-  mapMotion();
+      sankeyMotion();  
+      mapMotion();
 
+});
 
   d3.select("#year").on("input", function(){
     d3.select("#year-value").text(this.value);
-    var year = this.value;
-    data2 = aid.filter(function(d) { return d.numeric_year == year; })
+    if (!init) {
+          year = this.value;
+          data = dataAllYears.filter(function(d) { return d.numeric_year == year; });
+          update();
+          sankeyMotion();
+          mapMotion(); 
+         };
+  })
+};
 
-    byCategory = aggregateCategory(data2); 
-    byCountry = aggregateCountry(data2);
-    byCountryTotal = byCountry[0];
-    byCountryCategory = byCountry[1];
-
-    graph = sankeyFormat(data2, group);
-    
-    //Will work with update Sankey later if it's visually effectively,
+function update() {
+  //Will work with update Sankey later if it's visually effectively,
     //replot for now
     d3.selectAll(".node")
       .remove()
@@ -208,8 +234,4 @@ function load(error, aid, world) {
 
     donut.exit()
          .remove();
-
-    sankeyMotion();
-    mapMotion();
-  })
 };
