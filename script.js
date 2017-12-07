@@ -103,13 +103,40 @@ d3.queue()
 function load(error, aid, world) {
   if (error) { console.log(error); }
 
-  d3.select("#category")
-    .data(category)
-    .append("input")
-    .attr("type", "checkbox")
+  donor = [];
+  recipient = [];
 
+  aid.forEach(function (record) {
+        if (!donor.includes(record.implementing_agency_name)) {
+                donor.push(record.implementing_agency_name); };
+        if (!recipient.includes(record.country_name)) {
+                recipient.push(record.country_name); };
+  });
 
-  console.log(aid);
+  d3.select("#donor")
+    .append("select")
+    .attr("multiple", true)
+    .selectAll("option")
+    .data(donor)
+    .enter()
+    .append("option")
+    .text(function(d) { return d; })
+    .attr("value", function (d) { return d; });
+
+  d3.select("#recipient")
+    .append("select")
+    .attr("multiple", true)
+    .selectAll("option")
+    .data(recipient)
+    .enter()
+    .append("option")
+    .text(function(d) { return d; })
+    .attr("value", function (d) { return d; });
+
+  d3.select("#donor select")
+    .on("input", function(d) {
+      console.log(this.value);
+    })
 
   data = aid.filter(function(d) { return d.numeric_year == 2015; })
 
