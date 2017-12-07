@@ -11,49 +11,57 @@
 <body>
 
 <div class="container-fluid" style="width: 1320px;">
+  <h2>Exploratory Tool of US Foreign Aid 2001-2015</h2>
+  <br>
+
   <div class = "row">
-      <div class="col-md-3">  
-        <select multiple required>
-        </select>
+      <div class="col-md-3" id="donor" align="center">
+         <fieldset>
+            <legend>Select US agencies: </legend>
+         </fieldset>
       </div>
-      <div class="col-md-3">
-        <input type="checkbox" name="category" value="Cat 1"> 1  
-        <input type="checkbox" name="category" value="Cat 2"> 2 <br> 
-        <input type="checkbox" name="category" value="Cat 3"> 3  
-        <input type="checkbox" name="category" value="Cat 4"> 4 <br> 
-        <input type="checkbox" name="category" value="Cat 5"> 5  
-        <input type="checkbox" name="category" value="Cat 6"> 6 <br>     
-        <input type="checkbox" name="category" value="Cat 6"> 7   
-        <input type="checkbox" name="category" value="Cat 6"> 8 <br>  
-        <input type="checkbox" name="category" value="Cat 6"> 9   
-        <input type="checkbox" name="category" value="Cat 6"> 10 <br>                         
+
+      <div class="col-md-3" id="recipient" align="center">
+         <fieldset>
+            <legend>Select recipient countries: </legend>
+         </fieldset>
       </div>
-      <div class="col-md-3">
-        <input type="radio" name="group" value="income_group" checked> Income Level <br>
-        <input type="radio" name="group" value="region"> Region <br>
+      <div class="col-md-3" id="category" align="center">
+         <fieldset>
+            <legend>Select aid types: </legend>
+         </fieldset>
       </div>
-      <div class="col-md-3">
-        <select multiple required>
-        </select>
-      </div> 
+      <div class="col-md-3" id="group" align="center">
+         <fieldset>
+            <legend>Group countries by: </legend>
+              <input type="radio" name="group" value="income_group" checked> Income Level <br>
+              <input type="radio" name="group" value="region"> Region <br>
+
+      </div>
   </div>
 
-<br> 
-  <div class="row">
-      <svg id="chart1" class="col-md-7"></svg>
-      <svg id="chart2" class="col-md-5"></svg>
-  </div>
+ <br>
+ <br>
 
-<br>  
   <div class = "row">
-      <div class="col-md-6" style="float: right;">
+      <div class="col-md-3"></div>
+      <div class="col-md-6" align="center">
           <label for="year">
              YEAR <span id="year-value">2015</span>
           </label>
-           <input type="range" min="2001" max="2015" value="2015" step="1" id="year">
+          <input type="range" min="2001" max="2015" value="2015" step="1" id="year">
       </div>
   </div>
+
+ <br>
+ <br>
+
+ <div class="row" align="center">
+      <svg id="chart1" class="col-md-7"></svg>
+      <svg id="chart2" class="col-md-5"></svg>
+ </div>
 </div>
+
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="lib/d3-sankey.min.js"></script>
@@ -61,7 +69,14 @@
 <script src="lib/d3-geo-projection.min.js"></script>
 <script src="lib/jquery-2.2.1.min.js"></script>
 <script src="lib/bootstrap.min.js"></script>
+
+
+<script type="text/javascript" src="sankey.js"></script>
+<script type="text/javascript" src="globe.js"></script>
+<script type="text/javascript" src="auxiliary.js"></script>
+<script type="text/javascript" src="motion.js"></script>
 <script type="text/javascript" src="script.js"></script>
+
 </body>
 
 </html>
