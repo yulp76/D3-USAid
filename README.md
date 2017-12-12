@@ -1,1 +1,1 @@
-# DataViz-D3
+# D3 Project for CAPP 30239 Data Visualization for Policy Analysis @ UChicago
