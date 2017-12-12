@@ -29,6 +29,7 @@ a {
 #instruction {
 	font-family: "Garamond";
 	font-size: 18px;
+	font-weight: bold;
 	color: #02818a;
 }
 
@@ -49,16 +50,19 @@ label.year {
 label span {
 	font-family: "Imprint MT Shadow";
 	font-size: 40px;
+	font-weight: bold;
 	color: #6e016b;
 }
 
 #category, #group {
 	font-family: "Garamond";
+	font-weight: bold;
 	font-size: 20px;
 }
 
 #donor select {
 	font-family: "Garamond";
+	font-weight: bold;
 	font-size: 16px;
 	width: 280px;
 	height: 280px;
@@ -66,6 +70,7 @@ label span {
 
 #recipient select {
 	font-family: "Garamond";
+	font-weight: bold;
 	font-size: 16px;
 	width: 280px;
 	height: 280px;

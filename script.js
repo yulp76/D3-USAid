@@ -220,6 +220,7 @@ function updateSankey(){
           .attr("x", 14)
           .attr("dy", ".35em")
           .attr("font-family", "Garamond")
+          .attr("font-weight", "bold")
           .attr("font-size", 13)
           .attr("text-anchor", "start")
           .text(function(d) { return d.name; });
