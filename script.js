@@ -3,7 +3,7 @@ d3.queue()
   .defer(d3.json, 'data/world.json')
   .await(load);
 
-
+//Load
 function load(error, aid, world) {
   if (error) { console.log(error); }
 
@@ -88,6 +88,7 @@ function load(error, aid, world) {
 
 };
 
+//Plot from scratch
 function generate() {
     byCategory = aggregateCategory(data); 
     byCountry = aggregateCountry(data);
@@ -105,6 +106,7 @@ function generate() {
     mapMotion();
 }
 
+//Remove plotted
 function clearSpace() {
     svg1.select(".front").remove();
     svg1.select(".back").remove();
@@ -113,6 +115,7 @@ function clearSpace() {
     svg2.selectAll(".countryPie").remove();  
 };
 
+//Decide whether to issue warning/plot/update
 function interact(data) {
       d3.select("#warning")
            .select("p")
@@ -143,6 +146,7 @@ function interact(data) {
       };
 };
 
+//Update function collection
 function update() {
 
     byCategory = aggregateCategory(data); 
@@ -168,6 +172,8 @@ function update() {
     mapMotion();
 };
 
+
+//Sankey update functions
 function updateSankey(){
 
     sankey_layout(graph);
@@ -264,6 +270,7 @@ function updateSankey(){
 
   }
 
+//Donut update functions
 function updateDonut() {
 
     var donut = svg2.selectAll(".donut");

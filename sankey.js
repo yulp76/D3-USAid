@@ -39,6 +39,8 @@ function sankeyFormat(data, criteria) {
   return graph;
 };
 
+
+//Plot Sankey diagram
 function plotSankey(graph) {
   
   sankey_layout(graph);

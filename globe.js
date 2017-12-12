@@ -1,3 +1,4 @@
+//Get centroid of each country from shapefiles
 function getCentroid() {
   var centroid = d3.map();
   countries.forEach(function (country) {
@@ -6,6 +7,7 @@ function getCentroid() {
   return centroid;
   };
 
+//Aggregate selected data by category - for donut plot
 function aggregateCategory(data) {
   return d3.nest()
   .key(function(d) { return d.dac_category_name; })
@@ -13,6 +15,8 @@ function aggregateCategory(data) {
   .entries(data);
 };
 
+//Aggregate by country and return d3.map() where you can look up total amount received by a country
+//and an array with key being the country name, and values being the breakdown of aid by category
 function aggregateCountry(data) {
   byCountry = d3.nest().key(function(d) { return d.country_name; })
                        .rollup(function(v) { return d3.sum(v, function(d) { return d.constant_amount; }); })
@@ -33,7 +37,7 @@ function aggregateCountry(data) {
   return [byCountryTotal, byCountryCategory];
 };
 
-
+//Plot donut
 function plotDonut(data) {
 
   	svg2.selectAll("path")
@@ -50,7 +54,7 @@ function plotDonut(data) {
         .text(function(d) { return d.data.key + ":\nUS$" + d3.format(".2s")(d.data.value); });
 };
 
-
+//Draw grid and world map
 function drawMap(data) {
 
       //Dummy circle to ensure zoom/pan works for non-land areas
@@ -90,6 +94,7 @@ function drawMap(data) {
             .text(function(d) { return d.properties.name });
 };
 
+//Figure out whether a country is in the front face of the sphere
 var isVisible = {
   front: function(d) {
     return (((Math.cos((projection.rotate()[0]+centroid.get(className(d.key))[0])/360*2*Math.PI)>0) &&
@@ -97,6 +102,7 @@ var isVisible = {
   }
 };
 
+//Draw pies by country
 function drawCountryPie() {
   var points = gMap.selectAll(".countryPie")
                   .data(byCountryCategory, function(d) { return d.key; })

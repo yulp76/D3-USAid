@@ -1,3 +1,4 @@
+//Page layout variables
 var margin = {top: 10, right: 5, bottom: 10, left: 5},
     sankeyWidth = 750,
     mapWidth = 500,
@@ -6,6 +7,9 @@ var margin = {top: 10, right: 5, bottom: 10, left: 5},
     donutWidth = 25,
     innerR = R - donutWidth;
 
+var init = true;
+
+//Color scale
 var colorCategory = d3.scaleOrdinal()
                   .domain(['Administrative Costs', 'Agriculture', 'Commodity Assistance',
                            'Economic Growth', 'Education', 'Governance', 'Health and Population', 
@@ -26,15 +30,13 @@ var category = colorCategory.domain(),
     income = colorIncome.domain(),
     region = colorRegion.domain();
 
+//Map-related
 var originalScale = 250,
     scale = originalScale;
 
 var wheel_k = 1;
 var map_k = 1;
-var init = true;
-var group = "region";
 
-//Map projection
 var projection = d3.geoOrthographic()
           .scale(scale)
           .translate([mapWidth/2, height/2])
@@ -69,7 +71,7 @@ var sankey_layout = d3.sankey()
     .nodeId(function (d) { return d.name; })
     .nodeWidth(12)
     .nodePadding(20)
-    .extent([[margin.left,margin.top], [sankeyWidth-75, height-margin.bottom]]);
+    .extent([[margin.left,margin.top], [sankeyWidth-90, height-margin.bottom]]);
 
 var arc = d3.arc().outerRadius(R).innerRadius(innerR);
 
