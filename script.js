@@ -44,6 +44,19 @@ function load(error, aid, world) {
     .text(function(d) { return d; })
     .attr("value", function (d) { return d; });
 
+  d3.select("#selectAll")
+    .on("click", function(){
+      d3.select("#category")
+        .selectAll("input")
+        .property('checked', true);
+    });
+
+  d3.select("#deselectAll")
+    .on("click", function(){
+      d3.select("#category")
+        .selectAll("input")
+        .property('checked', false);
+    });
 
   d3.select("#generate")
     .on("click", function(){
