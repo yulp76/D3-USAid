@@ -39,13 +39,16 @@ function sankeyFormat(data, criteria) {
   return graph;
 };
 
-
-
 function plotSankey(graph) {
   
   sankey_layout(graph);
 
-  var links = svg1.append("g").selectAll(".link")
+  var back = svg1.append("g")
+                 .classed("back", true),
+      front = svg1.append("g")
+                 .classed("front", true);
+
+  var links = back.selectAll(".link")
                     .data(graph.links, function(d) { return d.source.name+"->"+d.target.name; })
                     .enter()
                     .append("path")
@@ -62,9 +65,8 @@ function plotSankey(graph) {
       links.append("title")
            .text(function(d) { return "US$" + d3.format(".2s")(d.value); });
 
-  var nodes = svg1.append("g").selectAll(".node")
-                  .data(graph.nodes, function(d) {
-                      return d.name; })
+  var nodes = front.selectAll(".node")
+                  .data(graph.nodes, function(d) { return d.name; })
                   .enter()
                   .append("g")
                   .attr("class", "node")
@@ -88,13 +90,14 @@ function plotSankey(graph) {
           .attr("stroke", "black")
 
       nodes.append("text")
-          .attr("x", function(d) { return 14; })
+          .attr("x", 14)
           .attr("y", function(d) { return (d.y1-d.y0)/2; })
-          .attr("dy", ".35em") //reference
+          .attr("dy", ".35em")
           .attr("font-family", "Candara")
+          .attr("font-size", 13)
           .attr("text-anchor", "start")
           .text(function(d) { return d.name; })
 
       nodes.append("title")
-          .text(function(d) { return d.name + "\nUS$" + d3.format(".2s")(d.value); });
+          .text(function(d) { return d.name + ":\nUS$" + d3.format(".2s")(d.value); });
 };

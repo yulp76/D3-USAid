@@ -36,21 +36,18 @@ function aggregateCountry(data) {
 
 function plotDonut(data) {
 
-var pie = d3.pie()
-            .value(function(d) { return d.value; });
-
-  var arcs = svg2.selectAll("path")
-              .data(pie(data), function(d) { return d.data.key; })
-              .enter()
-              .append("path")
-              .attr("d", arc)
-              .attr("fill", function(d) { return getColor(d.data.key); })
-              .attr("class", function(d) { return "donut "+className(d.data.key); })
-              .attr("opacity", 0.6)
-              .attr("stroke", "black")
-              .attr("transform", "translate(" + (mapWidth-R) + "," + height/2 + ")")
-              .append("title")
-              .text(function(d) { return d.data.key; });
+  	svg2.selectAll("path")
+        .data(pie(data), function(d) { return d.data.key; })
+        .enter()
+        .append("path")
+        .attr("d", arc)
+        .attr("fill", function(d) { return getColor(d.data.key); })
+        .attr("class", function(d) { return "donut "+className(d.data.key); })
+        .attr("opacity", 0.6)
+        .attr("stroke", "black")
+        .attr("transform", "translate(" + (mapWidth-R) + "," + height/2 + ")")
+        .append("title")
+        .text(function(d) { return d.data.key + ":\nUS$" + d3.format(".2s")(d.data.value); });
 };
 
 
@@ -70,7 +67,7 @@ function drawMap(data) {
           .data([grid])
           .enter()
           .append('path')
-          .classed('world', true)
+          .classed('globe', true)
           .classed('grid', true)
           .attr('d', map_path)
           .attr('fill', 'none')
@@ -82,7 +79,7 @@ function drawMap(data) {
                     .enter()
                     .append("path")
                     .attr("class", function(d) { return className(d.properties.name); })
-                    .classed('world', true)
+                    .classed('globe', true)
                     .classed("land", true)
                     .attr("d", map_path)
                     .attr("fill", "#e5f5e0")
@@ -91,16 +88,6 @@ function drawMap(data) {
 
     country.append("title")
             .text(function(d) { return d.properties.name });
-
-
-    button = gMap.append("g")
-                .attr("transform", "translate(" +(mapWidth/2-30)+","+(R*2-25)+")")
-       
-    button.append("text")
-          .attr("id", "reset")
-          .text("RESET")
-          .attr("stroke", "#2c7fb8")
-          .attr("transform", "translate(6,35)");
 };
 
 var isVisible = {
@@ -114,7 +101,7 @@ function drawCountryPie() {
   var points = gMap.selectAll(".countryPie")
                   .data(byCountryCategory, function(d) { return d.key; })
                   .enter()
-                .append("g")
+                  .append("g")
                   .attr("class", function(d) { return className(d.key); })
                   .classed("countryPie", true)
                   .attr("transform", function(d) { 
@@ -138,7 +125,8 @@ function drawCountryPie() {
             .attr("opacity", 0.6)
             .attr("stroke", "black")
             .append("title")
-            .text(function(d) { return d.data.key + ":\n"
+            .text(function(d) { return d.data.key + ":\nUS$"
+                + d3.format(".2s")(d.data.value) + "\n(" 
                 + d3.format(".0%")(d.data.value/byCountryTotal.get(getCountry(this.parentNode)))
-                + " of US$" + d3.format(".2s")(byCountryTotal.get(getCountry(this.parentNode))); })
+                + " of $" + d3.format(".2s")(byCountryTotal.get(getCountry(this.parentNode)))+")"; })
   };

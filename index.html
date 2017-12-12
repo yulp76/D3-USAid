@@ -11,25 +11,27 @@
 <body>
 
 <div class="container-fluid" style="width: 1320px;">
-  <h2>Exploratory Tool of US Foreign Aid 2001-2015</h2>
+  <h1 align="center">US Foreign Aid Exploratory Tool</h1>
+  <h2 align="center">2001 to 2015</h2>
+  <p align="right"><a href="https://explorer.usaid.gov/data.html">Data Source: US Aid Explorer Complete Dataset</a></p>
   <br>
 
   <div class = "row">
-      <div class="col-md-3" id="donor" align="center">
+      <div class="col-md-3" id="donor" align="left">
          <fieldset>
-            <legend>Select US agencies: </legend>
+            <legend>Select Agencies: </legend>
          </fieldset>
       </div>
 
-      <div class="col-md-3" id="recipient" align="center">
+      <div class="col-md-3" id="recipient" align="left">
          <fieldset>
-            <legend>Select recipient countries: </legend>
+            <legend>Select Recipients: </legend>
          </fieldset>
       </div>
-      <div class="col-md-3" id="category" align="center">
+      <div class="col-md-3" id="category" align="left">
          <fieldset>
-            <legend>Select aid types: </legend>
-                <input type="checkbox" name="category" value='Administrative Costs'> Administrative Costs <br>
+            <legend>Select Aid Types: </legend>
+                <input type="checkbox" name="category" value='Administrative Costs' float="left"> Administrative Costs <br>
                 <input type="checkbox" name="category" value='Agriculture'> Agriculture <br>
                 <input type="checkbox" name="category" value='Commodity Assistance'> Commodity Assistance <br>
                 <input type="checkbox" name="category" value='Economic Growth'> Economic Growth <br>
@@ -41,12 +43,11 @@
                 <input type="checkbox" name="category" value='Other'> Other <br>
           </fieldset>
       </div>
-      <div class="col-md-3" id="group" align="center">
+      <div class="col-md-3" id="group" align="left">
          <fieldset>
-            <legend>Group countries by: </legend>
+            <legend>Group Countries by: </legend>
               <input type="radio" name="group" value="income_group" checked> Income Level <br>
               <input type="radio" name="group" value="region"> Region <br>
-
       </div>
   </div>
 
@@ -56,18 +57,21 @@
   <div class = "row">
       <div class="col-md-2"></div>
       <div class="col-md-6" align="center">
-          <label for="year">
+          <label for="year" class="year">
              YEAR <span id="year-value">2015</span>
           </label>
           <input type="range" min="2001" max="2015" value="2015" step="1" id="year">
       </div>
       <div class="col-md-4" align="center">
-          <button type="button" id="generate">Generate!</button>
+          <button type="button" id="generate">GENERATE</button>
+          <button type="button" id="reset">RESET MAP</button>
       </div>
   </div>
 
  <br>
- <br>
+ <p align="center" id="instruction">Note: Click on country nodes of the graph on the left or the red circles on the globe<br>to move the respective country's pie chart to the front and zoom in to it.<br>Click "Generate" when changing non-year criteria.<br>Reset when map can no longer be zoomed out.</p>
+
+ <div class="row" id="warning" align="center"></div>
 
  <div class="row" align="center">
       <svg id="chart1" class="col-md-7"></svg>
@@ -75,6 +79,7 @@
  </div>
 </div>
 
+<br>
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="lib/d3-sankey.min.js"></script>
@@ -83,7 +88,7 @@
 <script src="lib/jquery-2.2.1.min.js"></script>
 <script src="lib/bootstrap.min.js"></script>
 
-
+<script type="text/javascript" src="initialize.js"></script>
 <script type="text/javascript" src="sankey.js"></script>
 <script type="text/javascript" src="globe.js"></script>
 <script type="text/javascript" src="auxiliary.js"></script>

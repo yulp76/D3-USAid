@@ -1,3 +1,24 @@
+//Move selection to front/back; Reference:http://bl.ocks.org/eesur/4e0a69d57d3bfc8a82c2
+d3.selection.prototype.moveToFront = function() {  
+      return this.each(function(){
+        this.parentNode.appendChild(this);
+      });
+    };
+
+d3.selection.prototype.moveToBack = function() {  
+        return this.each(function() { 
+            var firstChild = this.parentNode.firstChild; 
+            if (firstChild) { 
+                this.parentNode.insertBefore(this, firstChild); 
+            } 
+        });
+    };
+
+
+var zoom = d3.zoom()
+             .scaleExtent([0.01,10])
+             .on("zoom", zooming);
+
 function dragging(d) {
     var node_h = d.y1-d.y0
     d.y0 = Math.max(margin.top, Math.min(height-margin.bottom-node_h, d.y0+d3.event.dy))
@@ -11,12 +32,10 @@ function dragging(d) {
 
 
 function zoomMap() {
-        //Update map
-        gMap.selectAll('.world')
+        gMap.selectAll('.globe')
             .transition()
             .attr('d', map_path);
 
-        //Update pies
         gMap.selectAll(".countryPie")
             .transition()
             .attr("transform", function(d) { return "translate(" + projection(centroid.get(className(d.key))) + ")"; })
@@ -33,23 +52,27 @@ function zoomMap() {
 
 function zooming() {        
       if (d3.event.sourceEvent.type === 'wheel') {
-        
-        delta_k = d3.event.transform.k - wheel_k;
-        wheel_k = d3.event.transform.k;
-        if ( map_k+delta_k > 5) { 
-          delta_k=5-map_k;
-          map_k = 5;
-        } else if (map_k+delta_k < 1) { 
-          delta_k=1-map_k;
-          map_k =1;
-        } else { 
-          map_k = map_k + delta_k; };
+         if (d3.event.transform.k <= 1) {
+            var real_k = Math.log(d3.event.transform.k);
+         } else {
+            var real_k = d3.event.transform.k;
+         };
+            delta_k = real_k - wheel_k;
+            wheel_k = real_k;
+            if ( map_k+delta_k > 5) { 
+              delta_k=5-map_k;
+              map_k = 5;
+            } else if (map_k+delta_k < 1) { 
+              delta_k=1-map_k;
+              map_k =1;
+            } else { 
+              map_k = map_k + delta_k; };
 
         scale += originalScale*delta_k;
         projection.scale(scale);
         zoomMap();
          
-      } else {
+        } else {
         var dx = d3.event.sourceEvent.movementX,
             dy = d3.event.sourceEvent.movementY,
             r = projection.rotate();
@@ -58,7 +81,7 @@ function zooming() {
 
         projection.rotate(rotation);
 
-        gMap.selectAll('.world')
+        gMap.selectAll('.globe')
             .transition()
             .attr('d', map_path);
 
@@ -93,21 +116,22 @@ function highlightCategory(cls, bool){
 
 function highlightCountry(cls, bool){
   highlightLink(cls, bool);
-  pie = gMap.selectAll(".countryPie").filter("."+cls);
+  var countryPie = gMap.selectAll(".countryPie").filter("."+cls);
   if (bool) { d3.select(".node ."+cls)
                 .attr("opacity", 1);
-              pie.select("circle")
+              countryPie.select("circle")
                  .attr("opacity", 0);
-              pie.selectAll(".pie")
+              countryPie.selectAll(".pie")
                  .attr("opacity", 1);
               gMap.selectAll(".land."+cls)
                   .attr("fill", "#e34a33")
                   .attr("opacity", 1);
+              gMap.select(".countryPie."+cls).moveToFront();
   } else { d3.select(".node ."+cls)
              .attr("opacity", 0.6);
-           pie.select("circle")
+           countryPie.select("circle")
               .attr("opacity", 1);
-           pie.selectAll(".pie")
+           countryPie.selectAll(".pie")
               .attr("opacity", 0.6);
            gMap.selectAll(".land."+cls)
                .attr("fill", "#e5f5e0")
@@ -130,7 +154,7 @@ function zoomCountry(cls) {
              return function (t) {
                                     projection.rotate(r(t));
                                     projection.scale(s(t));
-                                    gMap.selectAll(".world").attr("d", map_path);
+                                    gMap.selectAll(".globe").attr("d", map_path);
                                     gMap.selectAll('.countryPie')
                                         .attr("transform", function(d) { return "translate(" + projection(centroid.get(className(d.key))) +")"; })
                                         .attr('visibility', isVisible.front);
@@ -142,7 +166,7 @@ function zoomCountry(cls) {
                                         .attr("d", pieArc(map_k));
                                     }; 
             });
-    };
+};
 
 function sankeyMotion(){
 
@@ -189,16 +213,33 @@ function mapMotion(){
     
     gMap.call(zoom);
 
-    gMap.select("#reset")
+    d3.select("#reset")
         .on("click", function() {
-          projection.rotate([0,0])
-                    .scale((scale=originalScale));
-          map_k=1;
-          zoomMap();
-          gMap.selectAll('.countryPie')
-              .transition()
-              .attr("transform", function(d) { return "translate(" + projection(centroid.get(className(d.key))) +")"; })
-              .attr('visibility', isVisible.front);         
+           gMap.select('.land')
+                .transition()
+                .duration(1500)
+                .tween("rotate-scale", function(){
+                     var r = d3.interpolate(projection.rotate(), [0,0]);
+                     scale += originalScale*(1-map_k);
+                     var s = d3.interpolate(projection.scale(), scale);
+                     var p = d3.interpolate(map_k, 1);
+
+                     return function (t) {
+                                    projection.rotate(r(t));
+                                    projection.scale(s(t));
+                                    gMap.selectAll(".globe").attr("d", map_path);
+                                    gMap.selectAll('.countryPie')
+                                        .attr("transform", function(d) { return "translate(" + projection(centroid.get(className(d.key))) +")"; })
+                                        .attr('visibility', isVisible.front);
+                                    map_k = p(t);
+                                    gMap.selectAll(".countryPie")
+                                        .selectAll("circle")
+                                        .attr("r", 3*map_k);
+                                    gMap.selectAll(".pie")
+                                        .attr("d", pieArc(map_k));
+                                    }; 
+            });
+
         });
 
     d3.selectAll(".donut")
@@ -221,4 +262,9 @@ function mapMotion(){
       .on("click", function(){
             cls = d3.select(this).attr("class");
             zoomCountry(cls);});
+
+    d3.selectAll(".pie")
+      .on("mouseover", function() { d3.select(this).attr("opacity", 1); })
+      .on("mouseout", function() { d3.select(this).attr("opacity", 0.6); });
+
 };
