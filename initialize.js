@@ -30,6 +30,16 @@ var category = colorCategory.domain(),
     income = colorIncome.domain(),
     region = colorRegion.domain();
 
+function getColor(name) {
+      if (category.includes(name)) {
+        return colorCategory(name);
+      } else if (income.includes(name)) {
+        return colorIncome(name);
+      } else if (region.includes(name)) {
+        return colorRegion(name);
+      } else { return "#cccccc"; }
+};
+
 //Map-related
 var originalScale = 250,
     scale = originalScale;
@@ -81,4 +91,15 @@ function pieArc(k){
   return d3.arc()
             .outerRadius(function(d) { return k*Math.min(50, Math.max(5, Math.sqrt(byCountryTotal.get(getCountry(this))/50000))); })
             .innerRadius(function(d) { return k*4; })
+};
+
+
+
+//Delete whitespace and "." in a string to make it a valid class name
+function className(string) {
+  return string.split(".").join("").replace(/ /g,"");
+}
+
+function getCountry(obj) {
+  return d3.select(obj.parentNode).attr("class").slice(0,-11);
 };
