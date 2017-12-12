@@ -95,7 +95,7 @@ function plotSankey(graph) {
           .attr("x", 14)
           .attr("y", function(d) { return (d.y1-d.y0)/2; })
           .attr("dy", ".35em")
-          .attr("font-family", "Candara")
+          .attr("font-family", "Garamond")
           .attr("font-size", 13)
           .attr("text-anchor", "start")
           .text(function(d) { return d.name; })

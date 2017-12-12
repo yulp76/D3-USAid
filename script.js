@@ -216,7 +216,7 @@ function updateSankey(){
     enter.append("text")
           .attr("x", 14)
           .attr("dy", ".35em")
-          .attr("font-family", "Candara")
+          .attr("font-family", "Garamond")
           .attr("font-size", 13)
           .attr("text-anchor", "start")
           .text(function(d) { return d.name; });

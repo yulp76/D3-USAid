@@ -1,78 +1,78 @@
 h1 {
-	font-family: "Bernard MT Condensed";
+	font-family: "Imprint MT Shadow";
 	font-size: 60px;
 	font-weight: bold;
 	color: #02818a;
 }
 
 h2 {
-	font-family: "Bernard MT Condensed";
+	font-family: "Imprint MT Shadow";
 	font-size: 50px;
 	font-weight: bold;
 	color: #6e016b;
 }
 
 a {
-	font-family: "Candara";
+	font-family: "Garamond";
 	font-size: 25px;
 	font-weight: bold;
 	color: #02818a;
 }
 
 #warning {
-	font-family: "Candara";
+	font-family: "Garamond";
 	font-size: 30px;
 	font-weight: bold;
 	color: #ce1256;
 }
 
 #instruction {
-	font-family: "Candara";
-	font-size: 20px;
+	font-family: "Garamond";
+	font-size: 18px;
 	color: #02818a;
 }
 
 legend {
-	font-family: "Candara";
+	font-family: "Garamond";
 	font-size: 30px;
 	font-weight: bold;
 	color: #02818a;
 }
 
 label.year {
-	font-family: "Candara";
+	font-family: "Garamond";
 	font-size: 30px;
 	font-weight: bold;
 	color: #02818a;
 }
 
 label span {
-	font-family: "Bernard MT Condensed";
+	font-family: "Imprint MT Shadow";
 	font-size: 40px;
 	color: #6e016b;
 }
 
 #category, #group {
-	font-family: "Candara";
+	font-family: "Garamond";
 	font-size: 20px;
 }
 
 #donor select {
-	font-family: "Candara";
+	font-family: "Garamond";
 	font-size: 16px;
 	width: 280px;
 	height: 280px;
 }
 
 #recipient select {
-	font-family: "Candara";
+	font-family: "Garamond";
 	font-size: 16px;
 	width: 280px;
 	height: 280px;
 }
 
 button {
-	font-family: "Candara";
+	font-family: "Garamond";
 	font-size: 25px;
 	font-weight: bold;
 	color: #6e016b;
