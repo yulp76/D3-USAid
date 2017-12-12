@@ -21,6 +21,9 @@ function load(error, aid, world) {
                 recipient.push(record.country_name); };
   });
 
+  donor.sort();
+  recipient.sort();
+
   d3.select("#donor")
     .append("select")
     .attr("multiple", true)
